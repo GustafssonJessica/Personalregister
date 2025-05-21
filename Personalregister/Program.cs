@@ -11,22 +11,20 @@ namespace Personalregister
 
         /*
         //Klasser som bör implementeras:
-            Det skulle kanske vara bra med olika typer av underklasser till personal om de blir större i framtiden. 
+            Det skulle kanske vara bra med olika typer av underklasser till personal om företaget blir större i framtiden. 
             Exempelvis administrativ personal, kökspersonal, serveringspersonal. Tyvärr minns jag inte hur man skapar underklasser dock.
 
 
         Attribut som bör ingå i klasserna:
             Förnamn, Efternamn, födelsedag, bostadsadress, kontaktuppgifter till närmast anhörig, mejladress, telefonnummer, hur länge personenen varit anställd, datum som personen ska vara ledig,
             "behörigheter" och övrig info (ex om får hantera känsliga livsmedel, ha ansvar för kassa osv)
-            Metoder: Get och Set. Kanske skicka mejl eller ringa. 
+            Metoder: Get och Set. Kanske skicka mejl eller ringa. Borde finnas mycket mer men står still i mitt huvud.
             Sen måste man såklart kunna ta bort personal med, men tror inte det är en metod i själva klassen. 
 
         */
 
         static void Main(string[] args)
         {
-
-            int personalId = 0;
             List<Personal> personalList = new List<Personal>();
             bool addPersonal = true;
 
@@ -34,28 +32,20 @@ namespace Personalregister
             {
                 Console.WriteLine("Vad vill du göra?\n" +
                     "1) Lägg till ny anställd\n" +
-                    "2) Se och ändra information om anställd\n" +
+                    "2) Se all lagrad data\n" +
                     "3) Radera anställd\n" +
                     "4) Logga ut");
                 string answer = Console.ReadLine();
 
-                //om vill lägga till ny anställd 
                 if (answer == "1")
                 {
                     Console.WriteLine("Var god mata in namn på personalen: ");
                     string name = Console.ReadLine();
                     Console.WriteLine($"Var god mata in {name}s lön (i SEK):  ");
                     double salary = double.Parse(Console.ReadLine().Trim());
-                    string fullId = "personal" + personalId.ToString(); 
                     Personal personal = new Personal(name, salary);
                     personalList.Add(personal);
 
-                    personalId++;
-                    /* måste särskilja dem på något sätt. Typ ge varje person ett unikt ID,
-                     men det är inget som jag minns hur man gör... tänkte göra det mha ett personalId-nummer som ökar
-                    med varje anställd. Men det gick inte så bra för jag vet inte hur jag ska få över den strängen från variabeln
-                    fullId till variabeln för personal.
-                    */
                     Console.WriteLine($"Du har lagt till {name} med lön {salary}. Vill du lägga till ytterligare info? Svara ja eller nej: ");
                     string answer2 = Console.ReadLine().ToLower();
                     if (answer2 == "ja")
@@ -70,26 +60,41 @@ namespace Personalregister
                         Console.WriteLine("Lägg till telefonnumer (endast siffror): ");
                         personal.PhoneNumber =  int.Parse(Console.ReadLine());
 
-                        Console.WriteLine("Nu har du lagt till all information om "+ personal.Name);
+                        Console.WriteLine("Lägg till mejladress: ");
+                        personal.Email = Console.ReadLine();
 
+                        //Osv...
+                        Console.WriteLine("Nu har du lagt till all information om "+ personal.Name);
                     }
-                    if (answer2 == "nej")
+                    else
                     {
                         Console.WriteLine("Okej, ingen mer info tillagd.");
 
                     }
                 }
 
-               else if (answer== "2")
+                else if (answer== "2")
                 {
-                    Console.WriteLine("Här kan du se och ändra informationen på nått sätt! Tyvärr ej implementerat :)");
-                    Console.WriteLine("Skriv namn på personen du vill se: ");
+                    if (personalList.Count() == 0)
+                    {
+                        Console.WriteLine("Det finns ingen personal i registret!\n");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Alla personaluppgifter i registret: ");
+                        foreach (var personal in personalList)
+                        {
+                            Console.WriteLine($"Namn: {personal.Name}, Lön: {personal.Salary}, Födelsedatum: {personal.BirthDate} osv...");
+                        }
+                        Console.WriteLine("\n");
+                    }
+
 
                 }
 
                 else if (answer == "3")
                 {
-                    Console.WriteLine("Här kan du radera en anställd... om jag hade kommit ihåg hur man raderar ett objekt.");
+                    Console.WriteLine("Här kan du radera en anställd... om jag hade kommit ihåg hur man raderar ett objekt.\n");
                 }
 
                 else if (answer == "4")
@@ -99,7 +104,7 @@ namespace Personalregister
                 }
             } while (addPersonal);
 
-            
+
 
         }
 
@@ -113,7 +118,7 @@ namespace Personalregister
             public string Email { get; set; }
             public string EmergencyContact { get; set; }
             public string Befattning { get; set; }
-            public TimeSpan Employed { get; set; }
+            public TimeSpan EmployedTime { get; set; }
 
 
             public Personal(string name, double salary)
@@ -126,7 +131,7 @@ namespace Personalregister
                 Email = string.Empty;
                 EmergencyContact = string.Empty;
                 Befattning = string.Empty;
-                Employed = new TimeSpan(0, 0, 0);
+                EmployedTime = new TimeSpan(0, 0, 0);
 
             }
 
@@ -140,10 +145,8 @@ namespace Personalregister
                 Email = email;
                 EmergencyContact = emergencyContact;
                 Befattning = befattning;
-                Employed = employed;
+                EmployedTime = employed;
             }
-
         }
-
     }
 }
