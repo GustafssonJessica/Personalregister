@@ -26,9 +26,9 @@ namespace Personalregister
         static void Main(string[] args)
         {
 
-
-
-            bool addPersonal = false;
+            int personalId = 0;
+            List<Personal> personalList = new List<Personal>();
+            bool addPersonal = true;
 
             do
             {
@@ -37,22 +37,28 @@ namespace Personalregister
                     "2) Se och ändra information om anställd\n" +
                     "3) Radera anställd\n" +
                     "4) Logga ut");
-
+                string answer = Console.ReadLine();
 
                 //om vill lägga till ny anställd 
-                if (Console.ReadLine() == "1")
+                if (answer == "1")
                 {
                     Console.WriteLine("Var god mata in namn på personalen: ");
                     string name = Console.ReadLine();
                     Console.WriteLine($"Var god mata in {name}s lön (i SEK):  ");
                     double salary = double.Parse(Console.ReadLine().Trim());
-                    Personal personal = new Personal(name, salary); //måste särskilja dem på något sätt. Typ ge varje person ett unikt ID,
-                                                                    //men det är inget som jag minns hur man gör. Minns inte heller vad jag ska göra
-                                                                    //för att inte alla ska heta "personal"... kanske kan göra en counter som läggs
-                                                                    //till efter personal, typ personal0 osv men det är ju inte optimalt.
+                    string fullId = "personal" + personalId.ToString(); 
+                    Personal personal = new Personal(name, salary);
+                    personalList.Add(personal);
 
+                    personalId++;
+                    /* måste särskilja dem på något sätt. Typ ge varje person ett unikt ID,
+                     men det är inget som jag minns hur man gör... tänkte göra det mha ett personalId-nummer som ökar
+                    med varje anställd. Men det gick inte så bra för jag vet inte hur jag ska få över den strängen från variabeln
+                    fullId till variabeln för personal.
+                    */
                     Console.WriteLine($"Du har lagt till {name} med lön {salary}. Vill du lägga till ytterligare info? Svara ja eller nej: ");
-                    if (Console.ReadLine().ToLower() == "ja")
+                    string answer2 = Console.ReadLine().ToLower();
+                    if (answer2 == "ja")
                     {
                         Console.WriteLine("Lägg till födelsedatum (åååå mm dd): ");
 
@@ -65,32 +71,36 @@ namespace Personalregister
                         personal.PhoneNumber =  int.Parse(Console.ReadLine());
 
                         Console.WriteLine("Nu har du lagt till all information om "+ personal.Name);
-                        break;
+
                     }
-                    if (Console.ReadLine().ToLower() == "nej")
+                    if (answer2 == "nej")
                     {
                         Console.WriteLine("Okej, ingen mer info tillagd.");
-                        break;
+
                     }
                 }
 
-                if (Console.ReadLine() == "2")
+               else if (answer== "2")
                 {
                     Console.WriteLine("Här kan du se och ändra informationen på nått sätt! Tyvärr ej implementerat :)");
+                    Console.WriteLine("Skriv namn på personen du vill se: ");
+
                 }
 
-                if( Console.ReadLine() == "3")
+                else if (answer == "3")
                 {
                     Console.WriteLine("Här kan du radera en anställd... om jag hade kommit ihåg hur man raderar ett objekt.");
                 }
 
-                if (Console.ReadLine() == "4")
+                else if (answer == "4")
                 {
                     Console.WriteLine("Du har loggat ut.");
                     addPersonal = false;
                 }
-
             } while (addPersonal);
+
+            
+
         }
 
         public class Personal
